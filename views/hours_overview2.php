@@ -42,8 +42,10 @@ require_once '../connection/database.php';
 $db = new Database();
 
 session_start();
+print_r($_SESSION);
 
-if ($_SESSION['is_admin'])
+
+if ($_SESSION['is_user'])
 {
 	// inlcudes etc vinden het niet zo leuk om met / te beginnen...
 	require_once '../connection/database.php';

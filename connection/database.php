@@ -39,15 +39,37 @@ class DATABASE {
             'username' => $username
         ]);
         $results = $statement->fetch(PDO::FETCH_ASSOC);
+
         if (!empty($results) && password_verify($password, $results['password']))
         {
             session_start();
             $_SESSION['logged_in_as'] = $username;
             $_SESSION['is_admin'] = $results['type_id'] === '1';
             header('location: ../views/users_overview2.php');
+			exit;
         }
         else
         header('location: login_incorrect.php');
+
+    }
+	public function login_user($username, $password){
+        $sql = 'SELECT type_id, password FROM users WHERE username = :username';
+        $statement = $this->dbh->prepare($sql);
+        $statement->execute([
+            'username' => $username
+        ]);
+        $results = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($results) && password_verify($password, $results['password']))
+        {
+            session_start();
+            $_SESSION['logged_in_as'] = $username;
+            $_SESSION['is_user'] = $results['type_id'] === '2';
+            header('location: ../views/hours_overview2.php');
+        }
+        else
+        header('location: login_incorrect.php');
+
 
     }
     
@@ -256,7 +278,6 @@ class DATABASE {
 			'username' => $username,
 			'email' => $email,
 			'password' => $hashed_password,    // <-- een hashed password, niet het password zelf! (hetzelfde bij create_user!)
-			'id' => $id
 		]);
 	}
 

@@ -36,6 +36,8 @@ $db = new Database();
 
 session_start();
 
+print_r($_SESSION);
+
 if ($_SESSION['is_admin'])
 {
 	// inlcudes etc vinden het niet zo leuk om met / te beginnen...
@@ -44,12 +46,16 @@ if ($_SESSION['is_admin'])
 	$users = (new Database())->users_overview();
 
 
+
+
 ?>
 <!-- End Php Connection code-->
 
 
 <!-- Body -->
 <body >
+
+
 
     <div class="sidebar" data-color="rose" data-background-color="black" data-image="../assets/img/sidebar-2.jpg">
       <!--
