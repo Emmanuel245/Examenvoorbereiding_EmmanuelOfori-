@@ -245,10 +245,6 @@ if ($_SESSION['is_admin'])
             <div class="col-12">
             <form class="form" method="POST" action="../code/add_user.php">
             <div class="modal-body">
-            
-
-                
-
                 <div class="form-group">
                     <div class="input-group mb-3">
                       <div class="input-group-prepend">
@@ -286,15 +282,9 @@ if ($_SESSION['is_admin'])
                 </div>
               <div class="modal-footer justify-content-center">
               
-              <button type="submit" class="btn btn-primary btn-round">Voeg user toe
+              <button type="submit" class="btn btn-primary btn-round"> Voeg user toe
               
               </button>
-
-              
-
-              
-              
-              
               
               </div>
               </form>
@@ -310,6 +300,7 @@ if ($_SESSION['is_admin'])
 
 
         <!-- container -->
+
         <div class="container-fluid">
 
           <!-- row -->

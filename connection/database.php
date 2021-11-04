@@ -52,26 +52,6 @@ class DATABASE {
         header('location: login_incorrect.php');
 
     }
-	public function login_user($username, $password){
-        $sql = 'SELECT type_id, password FROM users WHERE username = :username';
-        $statement = $this->dbh->prepare($sql);
-        $statement->execute([
-            'username' => $username
-        ]);
-        $results = $statement->fetch(PDO::FETCH_ASSOC);
-
-        if (!empty($results) && password_verify($password, $results['password']))
-        {
-            session_start();
-            $_SESSION['logged_in_as'] = $username;
-            $_SESSION['is_user'] = $results['type_id'] === '2';
-            header('location: ../views/hours_overview2.php');
-        }
-        else
-        header('location: login_incorrect.php');
-
-
-    }
     
 
     public function departments_overview(): array 
@@ -242,45 +222,6 @@ class DATABASE {
 			'password' => $hashed_password
 		]);
 	}
-
-	public function get_user(int $id): array
-	{
-		// Alleen de data die je wilt pre-fillen (password kun je als het goed is niet pre-fillen; je gebrukt hier een hash voor!)
-		$sql = 'SELECT type_id, username, email FROM users WHERE id = :id';
-
-		$statement = $this->dbh->prepare($sql);
-		$statement->execute([
-			'id' => $id
-		]);
-		// Denk erom: Als fetch() niks vindt, dan returned het false!
-		$user_data = $statement->fetch(PDO::FETCH_ASSOC);
-
-		// Je mag ook de if statement, en de return [] weg-laten
-		// Dan laat je ook : array weg bij de functie
-		// En return je gewoon $user_data
-		// Let erop dat dit false ipv een array kan returnen
-		if (is_array($user_data))
-			return $user_data;
-
-		// Als in die if nog niet gereturned bent, dan was $user_data geen array
-		return [];
-	}
-
-	public function update_user(int $id, int $type_id, string $username, string $email, string $password): void
-	{
-		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-		$sql = 'UPDATE users SET type_id = :type_id, username = :username, email = :email, password = :password WHERE id = :id';
-
-		$statement = $this->dbh->prepare($sql);
-		$statement->execute([
-			'type_id' => $type_id,
-			'username' => $username,
-			'email' => $email,
-			'password' => $hashed_password,    // <-- een hashed password, niet het password zelf! (hetzelfde bij create_user!)
-		]);
-	}
-
 	
 
 	public function delete_user(int $id): void
@@ -292,14 +233,6 @@ class DATABASE {
 		]);
 	}
 
-	public function get_user_types(): array
-	{
-		$sql = 'SELECT id, name FROM user_types order by id asc';
-
-		$statement = $this->statement_execute($sql);
-
-		return $statement->fetchAll(PDO::FETCH_ASSOC);
-	}
 
 	private function statement_execute($sql, $params = []): PDOStatement
 	{
@@ -340,6 +273,55 @@ class DATABASE {
         ]);
 
     }     
+
+	public function get_user_types(): array
+	{
+		$sql = 'SELECT id, type FROM user_types ORDER BY id asc';
+
+		$statement = $this->dbh->prepare($sql);
+		$statement->execute();
+
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	public function get_user(int $id): array
+	{
+		// Alleen de data die je wilt pre-fillen (password kun je als het goed is niet pre-fillen; je gebrukt hier een hash voor!)
+		$sql = 'SELECT type_id, username, email FROM users WHERE id = :id';
+
+		$statement = $this->dbh->prepare($sql);
+		$statement->execute([
+			'id' => $id
+		]);
+		// Denk erom: Als fetch() niks vindt, dan returned het false!
+		$user_data = $statement->fetch(PDO::FETCH_ASSOC);
+
+		// Je mag ook de if statement, en de return [] weg-laten
+		// Dan laat je ook : array weg bij de functie
+		// En return je gewoon $user_data
+		// Let erop dat dit false ipv een array kan returnen
+		if (is_array($user_data))
+			return $user_data;
+
+		// Als in die if nog niet gereturned bent, dan was $user_data geen array
+		return [];
+	}
+
+	// : void betekent: "Deze functie returned niet"
+	public function update_user(int $id, string $username, string $email, string $password): void
+	{
+		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+		$sql = 'UPDATE users SET username = :username, email = :email, password = :password WHERE id = :id';
+
+		$statement = $this->dbh->prepare($sql);
+		$statement->execute([
+			'username' => $username,
+			'email' => $email,
+			'password' => $hashed_password,    // <-- een hashed password, niet het password zelf! (hetzelfde bij create_user!)
+			'id' => $id
+		]);
+	}
 
     
 

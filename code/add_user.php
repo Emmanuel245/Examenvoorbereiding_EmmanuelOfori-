@@ -8,8 +8,8 @@ $db = new Database();
 
 
 
-$db->add_user(
-    $_POST['type_id'],
+$db->update_user(
+    $_POST['id'],
     $_POST['username'],
     $_POST['email'],
     $_POST['password']
