@@ -10,7 +10,7 @@
 <p>"De gebruikersnaam en/of het wachtwoord klopt niet."
 <br>
 "ga alsjeblieft"
-<a href="index.php">terug</a>
+<a href="../index.php">terug</a>
 "en probeer het nog een keer"
 </p>
     

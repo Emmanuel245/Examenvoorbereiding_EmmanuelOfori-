@@ -32,6 +32,7 @@ class DATABASE {
 		'created_at' => date('Y-m-d H:i:s')
 		]);
 	}
+
     public function login($username, $password){
         $sql = 'SELECT type_id, password FROM users WHERE username = :username';
         $statement = $this->dbh->prepare($sql);
@@ -46,6 +47,7 @@ class DATABASE {
             $_SESSION['logged_in_as'] = $username;
             $_SESSION['is_admin'] = $results['type_id'] === '1';
             header('location: ../views/users_overview2.php');
+			
 			exit;
         }
         else
@@ -292,6 +294,7 @@ class DATABASE {
 		$statement = $this->dbh->prepare($sql);
 		$statement->execute([
 			'id' => $id
+
 		]);
 		// Denk erom: Als fetch() niks vindt, dan returned het false!
 		$user_data = $statement->fetch(PDO::FETCH_ASSOC);
@@ -308,18 +311,19 @@ class DATABASE {
 	}
 
 	// : void betekent: "Deze functie returned niet"
-	public function update_user(int $id, string $username, string $email, string $password): void
+	public function update_user(  int $type_id, string $username, string $email, string $password): void
 	{
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-		$sql = 'UPDATE users SET username = :username, email = :email, password = :password WHERE id = :id';
+		$sql = 'UPDATE users SET type_id = :type_id, username = :username, email = :email, password = :password WHERE id = :id';
 
 		$statement = $this->dbh->prepare($sql);
 		$statement->execute([
+			'type_id' => $type_id,
 			'username' => $username,
 			'email' => $email,
-			'password' => $hashed_password,    // <-- een hashed password, niet het password zelf! (hetzelfde bij create_user!)
-			'id' => $id
+			'password' => $hashed_password    // <-- een hashed password, niet het password zelf! (hetzelfde bij create_user!)
+			
 		]);
 	}
 

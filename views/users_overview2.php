@@ -36,17 +36,8 @@ $db = new Database();
 
 session_start();
 
-print_r($_SESSION);
-
-if ($_SESSION['is_admin'])
-{
-	// inlcudes etc vinden het niet zo leuk om met / te beginnen...
-	require_once '../connection/database.php';
-
-	$users = (new Database())->users_overview();
-
-
-
+if ($_SESSION['is_admin']) {
+	$users = $db->users_overview();
 
 ?>
 <!-- End Php Connection code-->

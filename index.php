@@ -37,7 +37,7 @@ $db->create_admin();
 				<div class="col-md-6 col-lg-4">
 					<div class="login-wrap p-0">
 		      	<h3 class="mb-4 text-center">Have an account?</h3>
-		      	<form action="code/login.php" class="signin-form" method="POST">
+		      	<form action="/Examenvoorbereiding_EmmanuelOfori-/code/login.php" class="signin-form" method="POST">
 		      		<div class="form-group">
 		      			<input type="text" class="form-control" name="username" placeholder="Username" autofocus required>
 		      		</div>
